@@ -18,28 +18,35 @@ Globals:
         PARAM1: VALUE
 
 Resources:
-  TaskTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      TableName: stack-table
-      PrimaryKey:
-        Name: id
-        Type: String
 
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
 
+
+  PostTaskLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/aws/post-lambda
+      Handler: main
+      Tracing: Active
+      Events:
+        CreateBook:
+          Type: Api
+          TracingEnabled: true
+          Properties:
+            Method: post
+            Path: /task
+            RestApiId:
+              Ref: ApiGatewayApi
+              
   GetTasksLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambdas/get-lambda
-      Handler: handler
+      CodeUri: lambdas/aws/get-lambda
+      Handler: main
       Tracing: Active
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref TaskTable
       Events:
         CreateBook: # 6
           Type: Api
@@ -50,26 +57,6 @@ Resources:
             RestApiId:
               Ref: ApiGatewayApi
 
-    PostTaskLambda:
-      Type: AWS::Serverless::Function
-      Properties:
-        CodeUri: post-lambda
-        Handler: lambdas
-        Tracing: Active
-        Policies:
-          - DynamoDBCrudPolicy:
-              TableName: !Ref TaskTable
-        Events:
-          CreateBook:
-            Type: Api
-            TracingEnabled: true
-            Properties:
-              Method: get
-              Path: /task
-              RestApiId:
-                Ref: ApiGatewayApi
-
-
 Outputs:
   GetTasksLambdaArn:
     Export:
@@ -77,4 +64,11 @@ Outputs:
     Value:
       Fn::GetAtt:
         - GetTasksLambda
+        - Arn
+  PostTasksLambdaArn:
+    Export:
+      Name: PostTasksLambdaArn
+    Value:
+      Fn::GetAtt:
+        - PostTaskLambda
         - Arn

@@ -70,7 +70,8 @@ AWS Lambda Golang runtime requires a flat folder with the executable generated o
 To deploy your application for the first time, run the following in your shell:
 
 ```bash
-sam deploy --guided
+sam build
+sam deploy --template-file=.aws-sam/build/template.yaml --stack-name=sam-app --capabilities CAPABILITY_IAM --resolve-s3
 ```
 
 The command will package and deploy your application to AWS, with a series of prompts:

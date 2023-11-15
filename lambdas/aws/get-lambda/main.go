@@ -1,9 +1,10 @@
 package main
 
 import (
+	"hello-world/shared"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"hello-world/shared"
 )
 
 var logger = new(shared.Logger)
@@ -18,6 +19,5 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
-
 	lambda.Start(handler)
 }

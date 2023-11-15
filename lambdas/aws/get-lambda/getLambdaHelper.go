@@ -3,9 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/aws/aws-lambda-go/events"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/aws/aws-lambda-go/events"
 )
 
 var (
@@ -23,7 +24,7 @@ type getLambdaHelper struct {
 }
 
 func (glh getLambdaHelper) procsssRequest(event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	logger.Debug("Hello, World")
+	logger.Debug("Hello, World1")
 	resp, err := http.Get(DefaultHTTPGetAddress)
 
 	if err != nil {
